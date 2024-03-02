@@ -64,7 +64,7 @@ class geoglows_analyzer:
             
             # Print progress and alert
             prog = round(i/self.n * 100, 3)
-            print("Progress: {0:03d} %. Comid: {1}. Alert: {2}  ".format(prog, reach_id, warning), end='\r')
+            print("Progress: {0} %. Comid: {1}. Alert: {2}  ".format(prog, reach_id, warning), end='\r')
             sys.stdout.flush()
         
         print("\nFinished analysis...")
