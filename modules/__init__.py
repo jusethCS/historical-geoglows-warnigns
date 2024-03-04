@@ -43,6 +43,7 @@ class geoglows_analyzer:
             DataFrame: A DataFrame containing drainage alerts for each reach ID.
         """
         # Initialize drainage alerts DataFrame
+        print(f"Warning analysis for date: {date.strftime('%Y-%m-%d')}")
         drainage_alerts = self.drainage
         
         # Read ensemble dataset
@@ -63,9 +64,9 @@ class geoglows_analyzer:
             drainage_alerts.loc[i, ['alert']] = warning
             
             # Print progress and alert
-            prog = round(i/self.n * 100, 3)
-            print("Progress: {0} %. Comid: {1}. Alert: {2}  ".format(prog, reach_id, warning), end='\r')
+            prog = round(i/self.n * 100, 2)
+            print("Progress: {0} %.      ".format(prog), end='\r')
             sys.stdout.flush()
         
-        print("\nFinished analysis...")
+        print(f"Finished analysis. {date.strftime('%Y-%m-%d')}...")
         return drainage_alerts
