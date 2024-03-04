@@ -25,12 +25,15 @@ def get_ensemble_forecast_ncfiles(forecast_path:str, date:dt.datetime) -> tuple:
     # Get a list of all NetCDF files in the folder
     ncfiles = [os.path.join(folder, ncfile) for ncfile in os.listdir(folder)]
     
-    # Load each NetCDF file as a dataset
-    dataset = [xr.load_dataset(ncfile) for ncfile in ncfiles]
-    
-    # Extract ensemble indices from filenames
-    ensemble_index = [os.path.basename(ncfile)[:-3].split("_")[-1] for ncfile in ncfiles]
-    
+    # Load each NetCDF file as a dataset and Extract ensemble indices from filenames
+    dataset = []
+    ensemble_index = []
+    for ncfile in ncfiles:
+        try:
+            dataset.append(xr.load_dataset(ncfile))
+            ensemble_index.append(os.path.basename(ncfile)[:-3].split("_")[-1])
+        except:
+            print(f"{ncfile} not found.")
     return dataset, ensemble_index
 
 
