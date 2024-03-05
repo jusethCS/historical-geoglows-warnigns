@@ -31,7 +31,6 @@ def get_ensemble_forecast_ncfiles(forecast_path:str, date:dt.datetime) -> tuple:
     for ncfile in ncfiles:
         try:
             dataset.append(xr.load_dataset(ncfile))
-            print("Leido")
             ensemble_index.append(os.path.basename(ncfile)[:-3].split("_")[-1])
         except Exception as err:
             print(err)
