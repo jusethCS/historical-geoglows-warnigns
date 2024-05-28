@@ -75,7 +75,7 @@ def event_matrix(comid, combined_data):
 
 
 # Summarize the event matrix
-def summary(event_matrix):
+def summary(comid, event_matrix):
     alert_counts = event_matrix['alert'].value_counts().reset_index()
     alert_counts = alert_counts.sort_values(by='alert').reset_index(drop=True)
     alert_counts.rename(columns={
@@ -93,23 +93,27 @@ def summary(event_matrix):
 #                               MAIN CONTROLLER                               #
 ###############################################################################
 
-# Read drainage network
-drainage = pd.read_excel("geoglows_reachs_ids.xlsx")["comid"].to_list()
+def main(year):
+    # Read drainage network
+    drainage = pd.read_excel("geoglows_reachs_ids.xlsx")["comid"].to_list()
+    # Setup date range
+    start_date = f'{year}-01-01'
+    end_date = f'{year}-12-31'
+    # Combined data
+    combined_data = combine(start_date, end_date)
+    combined_out = pd.DataFrame()
+    for comid in drainage:
+        print(comid)
+        em = event_matrix(comid, combined_data)
+        summ = summary(comid, em)
+        combined_out = pd.concat([combined_out, summ], ignore_index=False)
+    combined_out = combined_out.fillna(0)
+    combined_out.to_csv(f"geoglows_analysis/results_comids-{year}.csv", index=True)
 
-# Setup date range
-start_date = '2014-01-01'
-end_date = '2019-12-31'
 
-# Combined data
-combined_data = combine(start_date, end_date)
-combined_out = pd.DataFrame()
-
-for comid in drainage:
-    print(comid)
-    em = event_matrix(comid, combined_data)
-    summ = summary(em)
-    combined_out = pd.concat([combined_out, summ], ignore_index=False)
-
-combined_out = combined_out.fillna(0)
-combined_out.to_csv("geoglows_analysis/results_comids.csv", index=True)
-
+main("2014")
+main("2015")
+main("2016")
+main("2017")
+main("2018")
+main("2019")
